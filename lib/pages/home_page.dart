@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'add_product_page.dart'; // pastikan file ini sudah kamu buat
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -60,6 +61,23 @@ class _HomePageState extends State<HomePage> {
     Navigator.pushReplacementNamed(context, '/');
   }
 
+  // 🔹 Tambahkan fungsi untuk ke halaman tambah produk
+  Future<void> _navigateToAddProduct() async {
+    if (token == null) return;
+
+    final refresh = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddProductPage(token: token!),
+      ),
+    );
+
+    if (refresh == true) {
+      // Refresh daftar produk setelah upload berhasil
+      fetchProducts();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,73 +94,81 @@ class _HomePageState extends State<HomePage> {
           ? const Center(child: CircularProgressIndicator())
           : products.isEmpty
               ? const Center(child: Text('Belum ada produk.'))
-              : ListView.builder(
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return Card(
-                      margin: const EdgeInsets.all(10),
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          // Gambar Produk
-                          ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              bottomLeft: Radius.circular(12),
-                            ),
-                            child: Image.network(
-                              product['image_url'],
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(Icons.broken_image, size: 80);
-                              },
-                            ),
-                          ),
-
-                          // Detail Produk
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    product['name'] ?? 'Tanpa nama',
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(product['description'] ?? '-'),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    'Rp ${product['price']}',
-                                    style: const TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    'Pemilik: ${product['owner']?['name'] ?? '-'}',
-                                    style: const TextStyle(color: Colors.grey),
-                                  ),
-                                ],
+              : RefreshIndicator(
+                  onRefresh: fetchProducts,
+                  child: ListView.builder(
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      return Card(
+                        margin: const EdgeInsets.all(10),
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            // Gambar Produk
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                bottomLeft: Radius.circular(12),
+                              ),
+                              child: Image.network(
+                                product['image_url'] ?? '',
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(Icons.broken_image, size: 80);
+                                },
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+
+                            // Detail Produk
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      product['name'] ?? 'Tanpa nama',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(product['description'] ?? '-'),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Rp ${product['price']}',
+                                      style: const TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Pemilik: ${product['owner']?['name'] ?? '-'}',
+                                      style: const TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
+      // 🔹 Tombol tambah produk
+      floatingActionButton: FloatingActionButton(
+        onPressed: _navigateToAddProduct,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
