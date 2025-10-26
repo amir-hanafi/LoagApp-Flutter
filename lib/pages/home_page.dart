@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'add_product_page.dart'; // pastikan file ini sudah kamu buat
+import 'add_product_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    final url = Uri.parse('http://192.168.1.15:8000/api/products');
+    final url = Uri.parse('http://192.168.1.14:8000/api/products');
     final response = await http.get(
       url,
       headers: {
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
     Navigator.pushReplacementNamed(context, '/');
   }
 
-  // 🔹 Tambahkan fungsi untuk ke halaman tambah produk
+  // Navigasi ke halaman tambah produk
   Future<void> _navigateToAddProduct() async {
     if (token == null) return;
 
@@ -73,8 +73,58 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (refresh == true) {
-      // Refresh daftar produk setelah upload berhasil
-      fetchProducts();
+      fetchProducts(); // refresh daftar produk
+    }
+  }
+
+  // 🔹 Fungsi konfirmasi hapus
+  Future<void> _confirmDelete(int productId) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Hapus Produk'),
+        content: const Text('Apakah kamu yakin ingin menghapus produk ini?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('Hapus'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await _deleteProduct(productId);
+    }
+  }
+
+  // 🔹 Fungsi hapus produk dari API
+  Future<void> _deleteProduct(int productId) async {
+    if (token == null) return;
+
+    final url = Uri.parse('http://192.168.1.14:8000/api/products/$productId');
+    final response = await http.delete(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Produk berhasil dihapus')),
+      );
+      fetchProducts(); // refresh daftar produk
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menghapus produk: ${response.body}')),
+      );
     }
   }
 
@@ -107,6 +157,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Gambar Produk
                             ClipRRect(
@@ -125,19 +176,33 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
 
-                            // Detail Produk
+                            // Detail Produk + Tombol Hapus
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      product['name'] ?? 'Tanpa nama',
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            product['name'] ?? 'Tanpa nama',
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete,
+                                              color: Colors.red),
+                                          onPressed: () =>
+                                              _confirmDelete(product['id']),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(height: 5),
                                     Text(product['description'] ?? '-'),
@@ -152,7 +217,8 @@ class _HomePageState extends State<HomePage> {
                                     const SizedBox(height: 5),
                                     Text(
                                       'Pemilik: ${product['owner']?['name'] ?? '-'}',
-                                      style: const TextStyle(color: Colors.grey),
+                                      style:
+                                          const TextStyle(color: Colors.grey),
                                     ),
                                   ],
                                 ),
@@ -164,7 +230,6 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ),
-      // 🔹 Tombol tambah produk
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToAddProduct,
         child: const Icon(Icons.add),
