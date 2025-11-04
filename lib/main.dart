@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loagapps/pages/list_page.dart';
 import 'package:loagapps/pages/login_page.dart';
 import 'package:loagapps/pages/home_page.dart';
+import 'package:loagapps/pages/profil_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,7 +39,8 @@ class _MainPageState extends State<MainPage> {
   // Daftar halaman
   final List<Widget> _pages = const [
     HomePage(),
-    ListPage()
+    ListPage(),
+    ProfilePage()
   ];
 
   // Saat item navbar ditekan
@@ -66,6 +68,10 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
             label: 'Barang',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'profil',
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loagapps/pages/register_page.dart';
 import 'package:loagapps/services/login_service.dart'; // file tempat fungsi loginUser() nanti kamu taruh
 
 class LoginPage extends StatefulWidget {
@@ -61,6 +62,30 @@ class _LoginPageState extends State<LoginPage> {
               child: isLoading
                   ? const CircularProgressIndicator(color: Colors.white)
                   : const Text('Login'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Belum punya akun? "),
+                GestureDetector(
+                  onTap: () {
+                    // Navigasi ke halaman Register
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterPage(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Register",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
