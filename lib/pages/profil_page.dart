@@ -16,7 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final token = prefs.getString('token'); // token disimpan saat login
 
     final response = await http.delete(
-      Uri.parse('http://192.168.2.181:8000/api/delete-account'),
+      Uri.parse('http://192.168.1.6:8000/api/delete-account'),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
@@ -37,6 +37,12 @@ class _ProfilePageState extends State<ProfilePage> {
         SnackBar(content: Text("Gagal: ${response.body}")),
       );
     }
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    Navigator.pushReplacementNamed(context, '/');
   }
 
   void _showDeleteDialog() {
@@ -67,7 +73,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Profil')),
+      appBar: AppBar(
+        title: const Text('Profil'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: logout,
+          )
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

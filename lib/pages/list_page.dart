@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loagapps/pages/edit_product_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -31,7 +32,7 @@ class _ListPageState extends State<ListPage> {
       return;
     }
 
-    final url = Uri.parse('http://192.168.2.181:8000/api/products');
+    final url = Uri.parse('http://192.168.1.6:8000/api/products');
     final response = await http.get(
       url,
       headers: {
@@ -55,11 +56,7 @@ class _ListPageState extends State<ListPage> {
     }
   }
 
-  Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    Navigator.pushReplacementNamed(context, '/');
-  }
+  
 
   // Navigasi ke halaman tambah produk
   Future<void> _navigateToAddProduct() async {
@@ -107,7 +104,7 @@ class _ListPageState extends State<ListPage> {
   Future<void> _deleteProduct(int productId) async {
     if (token == null) return;
 
-    final url = Uri.parse('http://192.168.2.181:8000/api/products/$productId');
+    final url = Uri.parse('http://192.168.1.6:8000/api/products/$productId');
     final response = await http.delete(
       url,
       headers: {
@@ -133,12 +130,6 @@ class _ListPageState extends State<ListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Daftar Produk'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: logout,
-          )
-        ],
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -201,6 +192,23 @@ class _ListPageState extends State<ListPage> {
                                               color: Colors.red),
                                           onPressed: () =>
                                               _confirmDelete(product['id']),
+                                        ),
+                                        TextButton(
+                                          child: Text("edit"),
+                                          onPressed: () => {
+                                            Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => EditProductPage(
+                                                productId: product['id'],          //gunakan kurung siku
+                                                name: product['name'],
+                                                description: product['description'],
+                                                price: product['price'].toString(), // pastikan string
+                                                image: product['image'],
+                                              ),
+                                            ),
+                                          )
+                                          },
                                         ),
                                       ],
                                     ),
