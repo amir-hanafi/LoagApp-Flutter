@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart'; // ✅ tambahkan ini
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,24 +11,57 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  Future<void> deleteUser(int userId) async {
-    final url = Uri.parse('http://192.168.1.14:8000/api/user/$userId');
-    final response = await http.delete(url);
+  Future<void> deleteAccount() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token'); // token disimpan saat login
+
+    final response = await http.delete(
+      Uri.parse('http://192.168.2.181:8000/api/delete-account'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      ScaffoldMessenger.of(context).showSnackBar( // ✅ sekarang context dikenali
-        SnackBar(content: Text(data['message'])),
-      );
+      // hapus token dari penyimpanan
+      await prefs.remove('token');
 
-      // misal setelah hapus akun, langsung ke login:
+      // tampilkan pesan dan arahkan ke halaman login
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Akun berhasil dihapus")),
+      );
       Navigator.pushReplacementNamed(context, '/');
     } else {
-      final error = jsonDecode(response.body);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal: ${error['message']}')),
+        SnackBar(content: Text("Gagal: ${response.body}")),
       );
     }
+  }
+
+  void _showDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Konfirmasi"),
+          content: const Text("Apakah Anda yakin ingin menghapus akun ini?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context), // batal
+              child: const Text("Batal"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(context); // tutup dialog
+                await deleteAccount(); // panggil fungsi hapus
+              },
+              child: const Text("Ya"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -35,11 +69,22 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Profil')),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            deleteUser(4); // contoh id = 1
-          },
-          child: const Text('Hapus Akun'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "Halaman Profil",
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _showDeleteDialog, // ✅ panggil dialog saat ditekan
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              child: const Text("Hapus Akun"),
+            ),
+          ],
         ),
       ),
     );
