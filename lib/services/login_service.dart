@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:loagapps/pages/home_page.dart';
 
 Future<void> loginUser(BuildContext context, String email, String password) async {
-  final url = Uri.parse('http://192.168.1.6:8000/api/login');
+  final url = Uri.parse('http://10.187.243.197:8000/api/login');
 
   final response = await http.post(
     url,
