@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart'; // ✅ tambahkan ini
+import 'edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,7 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final token = prefs.getString('token'); // token disimpan saat login
 
     final response = await http.delete(
-      Uri.parse('http://10.187.243.197:8000/api/delete-account'),
+      Uri.parse('http://192.168.1.6:8000/api/delete-account'),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
@@ -92,12 +93,25 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _showDeleteDialog, // ✅ panggil dialog saat ditekan
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-              ),
-              child: const Text("Hapus Akun"),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const EditProfilePage()),
+              );
+            },
+            child: const Text("Edit Profil"),
+          ),
+
+          const SizedBox(height: 10),
+
+          ElevatedButton(
+            onPressed: _showDeleteDialog,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
             ),
+            child: const Text("Hapus Akun"),
+          ),
+
           ],
         ),
       ),

@@ -32,7 +32,7 @@ class _ListPageState extends State<ListPage> {
       return;
     }
 
-    final url = Uri.parse('http://10.187.243.197:8000/api/products');
+    final url = Uri.parse('http://192.168.1.6:8000/api/products');
     final response = await http.get(
       url,
       headers: {
@@ -104,7 +104,7 @@ class _ListPageState extends State<ListPage> {
   Future<void> _deleteProduct(int productId) async {
     if (token == null) return;
 
-    final url = Uri.parse('http://10.187.243.197:8000/api/products/$productId');
+    final url = Uri.parse('http://192.168.1.6:8000/api/products/$productId');
     final response = await http.delete(
       url,
       headers: {

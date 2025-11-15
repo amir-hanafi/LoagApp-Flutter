@@ -21,7 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
       isLoading = true;
     });
 
-    final url = Uri.parse('http://10.187.243.197:8000/api/register'); // gunakan 10.0.2.2 untuk emulator Android
+    final url = Uri.parse('http://192.168.1.6:8000/api/register'); // gunakan 10.0.2.2 untuk emulator Android
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
