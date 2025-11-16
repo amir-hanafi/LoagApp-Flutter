@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loagapps/pages/detail_page.dart';
 import 'package:loagapps/pages/edit_product_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -141,11 +142,29 @@ class _ListPageState extends State<ListPage> {
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       final product = products[index];
-                      return Card(
+                      return GestureDetector(
+                        onTap: () async {
+                        final shouldRefresh = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => DetailPage(
+                              product: product,
+                              token: token!,      // <--- kirim token!
+                            ),
+                          ),
+                        );
+
+                        if (shouldRefresh == true) {
+                          fetchProducts();
+                        }
+                      },
+
+                        child: Card(
                         margin: const EdgeInsets.all(10),
                         elevation: 3,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
+                          
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,54 +206,34 @@ class _ListPageState extends State<ListPage> {
                                             ),
                                           ),
                                         ),
-                                        IconButton(
-                                          icon: const Icon(Icons.delete,
-                                              color: Colors.red),
-                                          onPressed: () =>
-                                              _confirmDelete(product['id']),
-                                        ),
-                                        TextButton(
-                                          child: Text("edit"),
-                                          onPressed: () => {
-                                            Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => EditProductPage(
-                                                productId: product['id'],          //gunakan kurung siku
-                                                name: product['name'],
-                                                description: product['description'],
-                                                price: product['price'].toString(), // pastikan string
-                                                image: product['image'],
+                                        Column(
+                                          children: [
+                                            Text(
+                                              'Rp ${product['price']}',
+                                              style: const TextStyle(
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                          )
-                                          },
+                                            SizedBox(height: 25),
+                                            Text(
+                                              "Alamat: ${product['owner']['province']}, ${product['owner']['city']}",
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 5),
-                                    Text(product['description'] ?? '-'),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      'Rp ${product['price']}',
-                                      style: const TextStyle(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      'Pemilik: ${product['owner']?['name'] ?? '-'}',
-                                      style:
-                                          const TextStyle(color: Colors.grey),
-                                    ),
+                                    
                                   ],
                                 ),
                               ),
                             ),
                           ],
                         ),
+                        
+                      ),
                       );
+                      
                     },
                   ),
                 ),
