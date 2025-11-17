@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loagapps/pages/register_page.dart';
-import 'package:loagapps/services/login_service.dart'; // file tempat fungsi loginUser() nanti kamu taruh
+import 'package:loagapps/services/login_service.dart';
+import 'package:loagapps/main.dart'; // file tempat fungsi loginUser() nanti kamu taruh
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,20 +17,26 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
 
   Future<void> handleLogin() async {
-    setState(() {
-      isLoading = true;
-    });
+  setState(() => isLoading = true);
 
-    await loginUser(
+  String? userId = await loginUser(
+    context,
+    emailController.text,
+    passwordController.text,
+  );
+
+  setState(() => isLoading = false);
+
+  if (userId != null) {
+    Navigator.pushReplacement(
       context,
-      emailController.text,
-      passwordController.text,
+      MaterialPageRoute(
+        builder: (_) => MainPage(userId: userId),
+      ),
     );
-
-    setState(() {
-      isLoading = false;
-    });
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

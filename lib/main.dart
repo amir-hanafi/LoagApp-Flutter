@@ -3,6 +3,8 @@ import 'package:loagapps/pages/list_page.dart';
 import 'package:loagapps/pages/login_page.dart';
 import 'package:loagapps/pages/home_page.dart';
 import 'package:loagapps/pages/profil_page.dart';
+import 'package:loagapps/pages/map_page.dart';
+import 'package:loagapps/pages/splash_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,18 +18,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'LoagApp',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const LoginPage(),
-        '/home': (context) => const MainPage(),
-      },
+      home: const SplashPage(),
     );
   }
 }
 
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final String userId;
+
+  const MainPage({super.key, required this.userId});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -35,13 +35,18 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+  late List<Widget> _pages;
 
-  // Daftar halaman
-  final List<Widget> _pages = const [
-    HomePage(),
+@override
+void initState() {
+  super.initState();
+  _pages = [
+    HomePage(userId: widget.userId),
     ListPage(),
-    ProfilePage()
+    ProfilePage(),
   ];
+}
+
 
   // Saat item navbar ditekan
   void _onItemTapped(int index) {
@@ -73,6 +78,7 @@ class _MainPageState extends State<MainPage> {
             icon: Icon(Icons.person),
             label: 'profil',
           ),
+          
         ],
       ),
     );

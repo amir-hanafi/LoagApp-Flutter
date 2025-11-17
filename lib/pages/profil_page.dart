@@ -71,26 +71,43 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  void _showOutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Konfirmasi"),
+          content: const Text("Apakah Anda yakin ingin log out?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context), // batal
+              child: const Text("Batal"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(context); // tutup dialog
+                await logout(); // panggil fungsi hapus
+              },
+              child: const Text("Ya"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profil'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: logout,
-          )
-        ],
+        
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              "Halaman Profil",
-              style: TextStyle(fontSize: 20),
-            ),
+            
             const SizedBox(height: 20),
             ElevatedButton(
             onPressed: () {
@@ -110,6 +127,16 @@ class _ProfilePageState extends State<ProfilePage> {
               backgroundColor: Colors.red,
             ),
             child: const Text("Hapus Akun"),
+          ),
+
+          const SizedBox(height: 10),
+
+          ElevatedButton(
+            onPressed: _showOutDialog,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 245, 183, 178),
+            ),
+            child: const Text("Logout"),
           ),
 
           ],
