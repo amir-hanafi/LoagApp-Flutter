@@ -13,6 +13,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
 
   bool isLoading = false;
 
@@ -29,6 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'name': nameController.text,
         'email': emailController.text,
         'password': passwordController.text,
+        'phone': phoneController.text,
       }),
     );
 
@@ -71,6 +74,11 @@ class _RegisterPageState extends State<RegisterPage> {
               controller: passwordController,
               decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
+            ),
+            TextField(
+              controller: phoneController,
+              decoration: const InputDecoration(labelText: 'Nomor Telepon (WhatsApp)'),
+              keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 20),
             ElevatedButton(

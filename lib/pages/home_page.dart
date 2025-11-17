@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => CariBarang(),
+                  builder: (_) => CariBarangPage(),
                 ),
               );
               } ,
