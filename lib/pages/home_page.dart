@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loagapps/pages/cari_barang.dart';
 import 'map_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,17 +17,31 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             ElevatedButton.icon(
-                  onPressed: () {Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => MapPage(userId: userId),
-  ),
-);
-} ,
-                  icon: const Icon(Icons.search),
-                  label: const Text(''),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
+              onPressed: () {Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MapPage(userId: userId),
                 ),
+              );
+              } ,
+              icon: const Icon(Icons.search),
+              label: const Text(''),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
+            ),
+            
+            ElevatedButton.icon(
+              onPressed: () {Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CariBarang(),
+                ),
+              );
+              } ,
+              icon: const Icon(Icons.search),
+              label: const Text('cari_barang'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
+            ),
+
           ],
         ),
         ),

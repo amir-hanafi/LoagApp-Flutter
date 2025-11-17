@@ -41,10 +41,12 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    Navigator.pushReplacementNamed(context, '/');
-  }
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.clear();  // 🔥 hapus semua data user yang tersimpan
+
+  Navigator.pushReplacementNamed(context, '/');
+}
+
 
   void _showDeleteDialog() {
     showDialog(

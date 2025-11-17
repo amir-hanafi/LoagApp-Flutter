@@ -17,7 +17,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   bool loading = false;
 
-  // Dropdown data
   List provinces = [];
   List cities = [];
 
@@ -27,119 +26,134 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    _loadUserData();
-    _fetchProvinces();
+    _fetchUserFromApi();   // <-- ambil data dari Laravel
+    _fetchProvinces();     // <-- load daftar provinsi
   }
 
-  Future<void> _loadUserData() async {
+  // ----------------------------------------------------------
+  // FETCH USER DATA DARI LARAVEL (/api/profile)
+  // ----------------------------------------------------------
+  Future<void> _fetchUserFromApi() async {
     final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
 
-    nameC.text = prefs.getString("name") ?? "";
-    emailC.text = prefs.getString("email") ?? "";
-    selectedProvince = prefs.getInt("province_id");
-    selectedCity = prefs.getInt("city_id");
+    final response = await http.get(
+      Uri.parse("http://192.168.1.6:8000/api/profile"),
+      headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
 
-    // jika sudah punya province_id, otomatis load kota
-    if (selectedProvince != null) {
-      _fetchCities(selectedProvince!);
+    print("GET PROFILE RESPONSE: ${response.body}");
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      setState(() {
+        nameC.text = data['user']['name'] ?? "";
+        emailC.text = data['user']['email'] ?? "";
+        selectedProvince = data['user']['province_id'];
+        selectedCity = data['user']['city_id'];
+      });
+
+      // kalau ada province_id, otomatis load kota
+      if (selectedProvince != null) {
+        _fetchCities(selectedProvince!);
+      }
     }
   }
 
+  // ----------------------------------------------------------
+  // FETCH PROVINCES
+  // ----------------------------------------------------------
   Future<void> _fetchProvinces() async {
-  final prefs = await SharedPreferences.getInstance();
-  final token = prefs.getString('token');
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
 
-  final response = await http.get(
-    Uri.parse('http://192.168.1.6:8000/api/provinces'),
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    },
-  );
+    final response = await http.get(
+      Uri.parse("http://192.168.1.6:8000/api/provinces"),
+      headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
 
-  print("Provinsi Response: ${response.body}");
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
 
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-
-    setState(() {
-      provinces = data['provinces'];   // ← Ambil list provinsi
-    });
-  } else {
-    print("Gagal memuat provinsi: ${response.body}");
+      setState(() {
+        provinces = data['provinces'];
+      });
+    }
   }
-}
 
-
-
-
+  // ----------------------------------------------------------
+  // FETCH CITIES
+  // ----------------------------------------------------------
   Future<void> _fetchCities(int provinceId) async {
-  final prefs = await SharedPreferences.getInstance();
-  final token = prefs.getString('token');
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
 
-  final response = await http.get(
-    Uri.parse('http://192.168.1.6:8000/api/cities/$provinceId'),
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    },
-  );
+    final response = await http.get(
+      Uri.parse("http://192.168.1.6:8000/api/cities/$provinceId"),
+      headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
 
-  print("Cities Response: ${response.body}");
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
 
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-
-    setState(() {
-      cities = data['cities'];   // ← Ambil list kota
-    });
-  } else {
-    print("Gagal memuat kota: ${response.body}");
+      setState(() {
+        cities = data['cities'];
+      });
+    }
   }
-}
 
-
-
+  // ----------------------------------------------------------
+  // UPDATE PROFILE
+  // ----------------------------------------------------------
   Future<void> _updateProfile() async {
     setState(() => loading = true);
 
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
+    final token = prefs.getString("token");
 
     final response = await http.post(
-      Uri.parse('http://192.168.1.6:8000/api/profile/update'),
+      Uri.parse("http://192.168.1.6:8000/api/profile/update"),
       headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
       },
       body: {
-        'name': nameC.text,
-        'email': emailC.text,
-        if (passwordC.text.isNotEmpty) 'password': passwordC.text,
-        if (selectedProvince != null) 'province_id': selectedProvince.toString(),
-        if (selectedCity != null) 'city_id': selectedCity.toString(),
+        "name": nameC.text,
+        "email": emailC.text,
+        if (passwordC.text.isNotEmpty) "password": passwordC.text,
+        if (selectedProvince != null) "province_id": selectedProvince.toString(),
+        if (selectedCity != null) "city_id": selectedCity.toString(),
       },
-      
     );
 
     setState(() => loading = false);
 
     if (response.statusCode == 200) {
-      // Simpan kembali ke SharedPreferences
-      prefs.setInt("province_id", selectedProvince ?? 0);
-      prefs.setInt("city_id", selectedCity ?? 0);
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Profil berhasil diperbarui")),
       );
       Navigator.pop(context);
     } else {
+      print(response.body);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Gagal: ${response.body}")),
+        SnackBar(content: Text("Gagal update profil: ${response.body}")),
       );
     }
   }
 
+  // ----------------------------------------------------------
+  // UI
+  // ----------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,8 +175,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
               TextField(
                 controller: passwordC,
-                decoration: const InputDecoration(labelText: "Password Baru (Opsional)"),
                 obscureText: true,
+                decoration: const InputDecoration(labelText: "Password Baru (Opsional)"),
               ),
 
               const SizedBox(height: 20),
