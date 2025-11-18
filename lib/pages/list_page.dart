@@ -25,37 +25,47 @@ class _ListPageState extends State<ListPage> {
   }
 
   Future<void> fetchProducts() async {
-    final prefs = await SharedPreferences.getInstance();
-    token = prefs.getString('token');
+  final prefs = await SharedPreferences.getInstance();
+  token = prefs.getString('token');
+  final currentUserIdStr = prefs.getString('user_id'); // ambil sebagai string
+  final currentUserId = currentUserIdStr != null ? int.tryParse(currentUserIdStr) : null;
 
-    if (token == null) {
-      print('Token tidak ditemukan.');
-      return;
-    }
-
-    final url = Uri.parse('http://192.168.1.6:8000/api/products');
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      setState(() {
-        products = data['products'];
-        isLoading = false;
-      });
-    } else {
-      print('Gagal memuat produk: ${response.statusCode}');
-      print(response.body);
-      setState(() {
-        isLoading = false;
-      });
-    }
+  if (token == null || currentUserId == null) {
+    print('Token atau User ID tidak ditemukan.');
+    return;
   }
+
+  final url = Uri.parse('http://192.168.2.135:8000/api/products');
+  final response = await http.get(
+    url,
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Accept': 'application/json',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+
+    // filter produk sesuai owner
+    final filteredProducts = (data['products'] as List)
+        .where((p) => p['owner'] != null && p['owner']['id'] == currentUserId)
+        .toList();
+
+    setState(() {
+      products = filteredProducts;
+      isLoading = false;
+    });
+  } else {
+    print('Gagal memuat produk: ${response.statusCode}');
+    print(response.body);
+    setState(() {
+      isLoading = false;
+    });
+  }
+}
+
+
 
   
 
@@ -105,7 +115,7 @@ class _ListPageState extends State<ListPage> {
   Future<void> _deleteProduct(int productId) async {
     if (token == null) return;
 
-    final url = Uri.parse('http://192.168.1.6:8000/api/products/$productId');
+    final url = Uri.parse('http://192.168.2.135:8000/api/products/$productId');
     final response = await http.delete(
       url,
       headers: {

@@ -8,7 +8,7 @@ Future<bool> uploadProduct({
   required String price,
   required File imageFile,
 }) async {
-  final uri = Uri.parse('http://192.168.1.6:8000/api/products');
+  final uri = Uri.parse('http://192.168.2.135:8000/api/products');
 
   final request = http.MultipartRequest('POST', uri)
     ..headers['Authorization'] = 'Bearer $token'

@@ -38,7 +38,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final token = prefs.getString("token");
 
     final response = await http.get(
-      Uri.parse("http://192.168.1.6:8000/api/profile"),
+      Uri.parse("http://192.168.2.135:8000/api/profile"),
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
@@ -72,7 +72,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final token = prefs.getString("token");
 
     final response = await http.get(
-      Uri.parse("http://192.168.1.6:8000/api/provinces"),
+      Uri.parse("http://192.168.2.135:8000/api/provinces"),
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
@@ -96,7 +96,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final token = prefs.getString("token");
 
     final response = await http.get(
-      Uri.parse("http://192.168.1.6:8000/api/cities/$provinceId"),
+      Uri.parse("http://192.168.2.135:8000/api/cities/$provinceId"),
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
@@ -122,7 +122,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final token = prefs.getString("token");
 
     final response = await http.post(
-      Uri.parse("http://192.168.1.6:8000/api/profile/update"),
+      Uri.parse("http://192.168.2.135:8000/api/profile/update"),
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token",

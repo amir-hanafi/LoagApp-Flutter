@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthApi {
-  static const String baseUrl = 'http://192.168.1.6:8000/api';
+  static const String baseUrl = 'http://192.168.2.135:8000/api';
 
   static Future<void> loginUser(String email, String password) async {
     final url = Uri.parse('$baseUrl/login');

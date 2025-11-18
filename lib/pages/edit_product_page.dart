@@ -68,7 +68,7 @@ class _EditProductPageState extends State<EditProductPage> {
       return;
     }
 
-    final url = Uri.parse('http://192.168.1.6:8000/api/products/${widget.productId}');
+    final url = Uri.parse('http://192.168.2.135:8000/api/products/${widget.productId}');
     var request = http.MultipartRequest('POST', url);
     request.headers['Authorization'] = 'Bearer $token';
     request.fields['name'] = _nameController.text;
@@ -168,7 +168,7 @@ class _EditProductPageState extends State<EditProductPage> {
                     : Image.network(
                         widget.image.startsWith('http')
                             ? widget.image
-                            : 'http://192.168.1.6:8000/storage/${widget.image}',
+                            : 'http://192.168.2.135:8000/storage/${widget.image}',
                         height: 150,
                         errorBuilder: (context, error, stackTrace) =>
                             const Icon(Icons.broken_image, size: 100),

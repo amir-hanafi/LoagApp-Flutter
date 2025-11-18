@@ -31,7 +31,7 @@ class _CariBarangPageState extends State<CariBarangPage> {
 
     if (token == null) return;
 
-    final url = Uri.parse('http://192.168.1.6:8000/api/products');
+    final url = Uri.parse('http://192.168.2.135:8000/api/products');
     final response = await http.get(
       url,
       headers: {
