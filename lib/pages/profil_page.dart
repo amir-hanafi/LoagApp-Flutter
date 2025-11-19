@@ -17,7 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final token = prefs.getString('token'); // token disimpan saat login
 
     final response = await http.delete(
-      Uri.parse('http://192.168.2.135:8000/api/delete-account'),
+      Uri.parse('http://192.168.1.6:8000/api/delete-account'),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',

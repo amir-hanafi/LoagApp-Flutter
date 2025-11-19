@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   bool isLoading = false;
@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String? userId = await loginUser(
     context,
-    emailController.text,
+    nameController.text,
     passwordController.text,
   );
 
@@ -48,9 +48,9 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: emailController,
+              controller: nameController,
               decoration: const InputDecoration(
-                labelText: 'Email',
+                labelText: 'username',
                 border: OutlineInputBorder(),
               ),
             ),

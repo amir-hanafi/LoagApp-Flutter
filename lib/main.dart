@@ -3,7 +3,6 @@ import 'package:loagapps/pages/list_page.dart';
 import 'package:loagapps/pages/login_page.dart';
 import 'package:loagapps/pages/home_page.dart';
 import 'package:loagapps/pages/profil_page.dart';
-import 'package:loagapps/pages/map_page.dart';
 import 'package:loagapps/pages/splash_page.dart';
 
 void main() {

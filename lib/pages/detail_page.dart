@@ -63,7 +63,7 @@ class DetailPage extends StatelessWidget {
   if (confirm != true) return;
 
   final url = Uri.parse(
-      'http://192.168.2.135:8000/api/products/${product['id']}');
+      'http://192.168.1.6:8000/api/products/${product['id']}');
 
   final response = await http.delete(
     url,

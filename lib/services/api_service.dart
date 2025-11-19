@@ -3,16 +3,16 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://192.168.2.135:8000/api';
+  static const String baseUrl = 'http://192.168.1.6:8000/api';
 
   // Fungsi login
   static Future<Map<String, dynamic>?> login(
-      String email, String password) async {
+      String name, String password) async {
     final url = Uri.parse('$baseUrl/login');
     final response = await http.post(
       url,
       body: {
-        'email': email,
+        'name': name,
         'password': password,
       },
     );

@@ -11,7 +11,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
@@ -23,13 +22,12 @@ class _RegisterPageState extends State<RegisterPage> {
       isLoading = true;
     });
 
-    final url = Uri.parse('http://192.168.2.135:8000/api/register'); // gunakan 10.0.2.2 untuk emulator Android
+    final url = Uri.parse('http://192.168.1.6:8000/api/register'); // gunakan 10.0.2.2 untuk emulator Android
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'name': nameController.text,
-        'email': emailController.text,
         'password': passwordController.text,
         'phone': phoneController.text,
       }),
@@ -65,10 +63,6 @@ class _RegisterPageState extends State<RegisterPage> {
             TextField(
               controller: nameController,
               decoration: const InputDecoration(labelText: 'Nama'),
-            ),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
             ),
             TextField(
               controller: passwordController,

@@ -4,14 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 Future<String?> loginUser(
-    BuildContext context, String email, String password) async {
-  final url = Uri.parse('http://192.168.2.135:8000/api/login');
+    BuildContext context, String name, String password) async {
+  final url = Uri.parse('http://192.168.1.6:8000/api/login');
 
   final response = await http.post(
     url,
     headers: {'Content-Type': 'application/json'},
     body: jsonEncode({
-      'email': email,
+      'name': name,
       'password': password,
     }),
   );
@@ -52,7 +52,7 @@ Future<Map<String, dynamic>?> getUserData() async {
   if (token == null) return null;
 
   final response = await http.get(
-    Uri.parse("http://192.168.2.135:8000/api/user"),
+    Uri.parse("http://192.168.1.6:8000/api/user"),
     headers: {"Authorization": "Bearer $token"},
   );
 

@@ -12,8 +12,9 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController nameC = TextEditingController();
-  final TextEditingController emailC = TextEditingController();
   final TextEditingController passwordC = TextEditingController();
+  final TextEditingController phoneC = TextEditingController();
+
 
   bool loading = false;
 
@@ -38,7 +39,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final token = prefs.getString("token");
 
     final response = await http.get(
-      Uri.parse("http://192.168.2.135:8000/api/profile"),
+      Uri.parse("http://192.168.1.6:8000/api/profile"),
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
@@ -52,10 +53,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
       setState(() {
         nameC.text = data['user']['name'] ?? "";
-        emailC.text = data['user']['email'] ?? "";
+        phoneC.text = data['user']['phone'] ?? "";
         selectedProvince = data['user']['province_id'];
         selectedCity = data['user']['city_id'];
       });
+
 
       // kalau ada province_id, otomatis load kota
       if (selectedProvince != null) {
@@ -72,7 +74,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final token = prefs.getString("token");
 
     final response = await http.get(
-      Uri.parse("http://192.168.2.135:8000/api/provinces"),
+      Uri.parse("http://192.168.1.6:8000/api/provinces"),
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
@@ -96,7 +98,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final token = prefs.getString("token");
 
     final response = await http.get(
-      Uri.parse("http://192.168.2.135:8000/api/cities/$provinceId"),
+      Uri.parse("http://192.168.1.6:8000/api/cities/$provinceId"),
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
@@ -122,18 +124,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final token = prefs.getString("token");
 
     final response = await http.post(
-      Uri.parse("http://192.168.2.135:8000/api/profile/update"),
+      Uri.parse("http://192.168.1.6:8000/api/profile/update"),
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
       },
       body: {
-        "name": nameC.text,
-        "email": emailC.text,
-        if (passwordC.text.isNotEmpty) "password": passwordC.text,
-        if (selectedProvince != null) "province_id": selectedProvince.toString(),
-        if (selectedCity != null) "city_id": selectedCity.toString(),
-      },
+      "name": nameC.text,
+      "phone": phoneC.text, // <-- tambah ini
+      if (passwordC.text.isNotEmpty) "password": passwordC.text,
+      if (selectedProvince != null) "province_id": selectedProvince.toString(),
+      if (selectedCity != null) "city_id": selectedCity.toString(),
+    },
+
     );
 
     setState(() => loading = false);
@@ -169,15 +172,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
 
               TextField(
-                controller: emailC,
-                decoration: const InputDecoration(labelText: "Email"),
-              ),
-
-              TextField(
                 controller: passwordC,
                 obscureText: true,
                 decoration: const InputDecoration(labelText: "Password Baru (Opsional)"),
               ),
+
+              const SizedBox(height: 20,),
+
+              TextField(
+                controller: phoneC,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  labelText: "Nomor Telepon",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+
 
               const SizedBox(height: 20),
 
