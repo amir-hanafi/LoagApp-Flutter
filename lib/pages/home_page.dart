@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loagapps/pages/cari_barang.dart';
+import 'package:loagapps/pages/coba_page.dart';
 
 class HomePage extends StatelessWidget {
   final String userId;
@@ -25,6 +26,18 @@ class HomePage extends StatelessWidget {
               } ,
               icon: const Icon(Icons.search),
               label: const Text('cari_barang'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CobaPage(),
+                ),
+              );
+              } ,
+              icon: const Icon(Icons.search),
+              label: const Text('coba_style'),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
             ),
 

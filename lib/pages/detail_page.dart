@@ -98,6 +98,8 @@ class DetailPage extends StatelessWidget {
     final String ownerProfile = owner != null ? _safeString(owner['profile_photo'], '') : '';
     final String province = owner != null ? _safeString(owner['province'], '-') : '-';
     final String city = owner != null ? _safeString(owner['city'], '-') : '-';
+    final String district = owner != null ? _safeString(owner['district'], '-') : '-';
+    final String village = owner != null ? _safeString(owner['village'], '-') : '-';
 
     return Scaffold(
       appBar: AppBar(
@@ -177,7 +179,7 @@ class DetailPage extends StatelessWidget {
                   children: [
                     SizedBox(height: 100),
                     Text(
-                      "Alamat: ${product['owner']['province']}, ${product['owner']['city']}",
+                      "Alamat: ${product['owner']['province']}, ${product['owner']['city']}, ${product['owner']['district']}, ${product['owner']['village']}",
                     ),
                   ],
                 ),

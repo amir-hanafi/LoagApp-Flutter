@@ -9,11 +9,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 class DetailCariBarangPage extends StatelessWidget {
+  final Color kBeige = Color(0xFFDFC49A);
+  final Color kDark = Color(0xFF4B4038);
+  final BorderRadius kRadius = BorderRadius.all(Radius.circular(14));
   
   final Map product; // data produk (Map) dari list_page
   final String token;
 
-  const DetailCariBarangPage({super.key, required this.product, required this.token});
+  DetailCariBarangPage({super.key, required this.product, required this.token});
 
   String _safeString(dynamic v, [String fallback = '-']) {
     if (v == null) return fallback;
@@ -82,56 +85,67 @@ class DetailCariBarangPage extends StatelessWidget {
     final String ownerProfile = owner != null ? _safeString(owner['profile_photo'], '') : '';
     final String province = owner != null ? _safeString(owner['province'], '-') : '-';
     final String city = owner != null ? _safeString(owner['city'], '-') : '-';
+    final String district = owner != null ? _safeString(owner['district'], '-') : '-';
+    final String village = owner != null ? _safeString(owner['village'], '-') : '-';
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Detail Product"),
-      ),
+      appBar: AppBar(title: Text(
+        'Detail Barang',
+        style: TextStyle(color: Colors.white),
+        ), 
+        backgroundColor: kDark,),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Foto produk (aman)
-            Text(
-              name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 30),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: _buildNetworkImage(imageUrl, height: 220),
-            ),
-            const SizedBox(height: 16),
-
-            // Nama + Harga
-            Text(
-              'Rp ${price}',
-              style: const TextStyle(fontSize: 16, color: Colors.green, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-
-            const Text('Deskripsi :', style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Text(description),
-            const SizedBox(height: 20),
-
-            Row(
+        
+        child: Container(
+          color: kBeige,
+          
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Informasi Pemilik : ',style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(ownerName),
-                Spacer(),
-                Column(
+                // Foto produk (aman)
+                Text(
+                  name,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 30),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: _buildNetworkImage(imageUrl, height: 220),
+                ),
+                const SizedBox(height: 16),
+            
+                // Nama + Harga
+                Text(
+                  'Rp ${price}',
+                  style: const TextStyle(fontSize: 16, color: Colors.green, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 16),
+            
+                const Text('Deskripsi :', style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Text(description),
+                const SizedBox(height: 20),
+            
+                Row(
                   children: [
-                    SizedBox(height: 100),
-                    Text(
-                      "Alamat: ${product['owner']['province']}, ${product['owner']['city']}",
+                    const Text('Informasi Pemilik : ',style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(ownerName),
+                    Spacer(),
+                    Column(
+                      children: [
+                        SizedBox(height: 100),
+                        Text(
+                          "Alamat: ${product['owner']['province']}, ${product['owner']['district']}, ${product['owner']['village']}, ${product['owner']['city']}",
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
       bottomNavigationBar: Container(
