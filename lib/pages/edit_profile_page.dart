@@ -46,7 +46,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (token == null) return;
 
     final response = await http.get(
-      Uri.parse("http://192.168.1.6:8000/api/profile"),
+      Uri.parse("http://10.187.243.197:8000/api/profile"),
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token",
@@ -78,7 +78,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   // ------------------ FETCH PROVINCES ------------------
 Future<void> _fetchProvinces() async {
   final response = await http.get(
-    Uri.parse("http://192.168.1.6:8000/api/provinces"),
+    Uri.parse("http://10.187.243.197:8000/api/provinces"),
     headers: {"Accept": "application/json"},
   );
 
@@ -93,7 +93,7 @@ Future<void> _fetchProvinces() async {
 // ------------------ FETCH CITIES ------------------
 Future<void> _fetchCities(int provinceId) async {
   final response = await http.get(
-    Uri.parse("http://192.168.1.6:8000/api/cities/$provinceId"),
+    Uri.parse("http://10.187.243.197:8000/api/cities/$provinceId"),
     headers: {"Accept": "application/json"},
   );
 
@@ -108,7 +108,7 @@ Future<void> _fetchCities(int provinceId) async {
 // ------------------ FETCH DISTRICTS ------------------
 Future<void> _fetchDistricts(int cityId) async {
   final response = await http.get(
-    Uri.parse("http://192.168.1.6:8000/api/districts/$cityId"),
+    Uri.parse("http://10.187.243.197:8000/api/districts/$cityId"),
     headers: {"Accept": "application/json"},
   );
 
@@ -123,7 +123,7 @@ Future<void> _fetchDistricts(int cityId) async {
 // ------------------ FETCH VILLAGES ------------------
 Future<void> _fetchVillages(int districtId) async {
   final response = await http.get(
-    Uri.parse("http://192.168.1.6:8000/api/villages/$districtId"),
+    Uri.parse("http://10.187.243.197:8000/api/villages/$districtId"),
     headers: {"Accept": "application/json"},
   );
 
@@ -145,7 +145,7 @@ Future<void> _fetchVillages(int districtId) async {
     if (token == null) return;
 
     final response = await http.post(
-      Uri.parse("http://192.168.1.6:8000/api/profile/update"),
+      Uri.parse("http://10.187.243.197:8000/api/profile/update"),
       headers: {
         "Accept": "application/json",
         "Authorization": "Bearer $token",

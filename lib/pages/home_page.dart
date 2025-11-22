@@ -28,18 +28,18 @@ class HomePage extends StatelessWidget {
               label: const Text('cari_barang'),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
             ),
-            ElevatedButton.icon(
-              onPressed: () {Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => CobaPage(),
-                ),
-              );
-              } ,
-              icon: const Icon(Icons.search),
-              label: const Text('coba_style'),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
-            ),
+            // ElevatedButton.icon(
+            //   onPressed: () {Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (_) => CobaPage(),
+            //     ),
+            //   );
+            //   } ,
+            //   icon: const Icon(Icons.search),
+            //   label: const Text('coba_style'),
+            //   style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
+            // ),
 
           ],
         ),

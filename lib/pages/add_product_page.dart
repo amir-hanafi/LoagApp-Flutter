@@ -44,7 +44,7 @@ class _AddProductPageState extends State<AddProductPage> {
       _isUploading = true;
     });
 
-    final url = Uri.parse('http://192.168.1.6:8000/api/products');
+    final url = Uri.parse('http://10.187.243.197:8000/api/products');
 
     var request = http.MultipartRequest('POST', url)
       ..headers['Authorization'] = 'Bearer ${widget.token}'

@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class LocationService {
-  static const baseUrl = "http://192.168.1.6:8000/api";
+  static const baseUrl = "http://10.187.243.197:8000/api";
 
   static Future<void> updateLocation(String userId, double lat, double lng) async {
   final res = await http.post(

@@ -1,46 +1,46 @@
 // register_page.dart
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class CobaPage extends StatelessWidget {
-  final Color kBeige = Color(0xFFDFC49A);
-  final Color kDark = Color(0xFF4B4038);
-  final BorderRadius kRadius = BorderRadius.all(Radius.circular(14));
+// class CobaPage extends StatelessWidget {
+//   final Color kBeige = Color(0xFFDFC49A);
+//   final Color kDark = Color(0xFF4B4038);
+//   final BorderRadius kRadius = BorderRadius.all(Radius.circular(14));
 
 
- CobaPage({super.key});
+//  CobaPage({super.key});
 
   
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Coba"),),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 28),
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: kRadius),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: 8),
-                Text('Daftar', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                SizedBox(height: 12),
-                TextField(decoration: InputDecoration(hintText: 'Enter Email', filled: true, fillColor: kBeige.withOpacity(0.2), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none))),
-                SizedBox(height: 12),
-                TextField(obscureText: true, decoration: InputDecoration(hintText: 'Password', filled: true, fillColor: kBeige.withOpacity(0.2), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none))),
-                SizedBox(height: 18),
-                ElevatedButton(onPressed: () {}, child: Padding(padding: EdgeInsets.symmetric(vertical: 14), child: Text('Daftar')),
-                    style: ElevatedButton.styleFrom(backgroundColor: kDark, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text("Coba"),),
+//       body: Center(
+//         child: SingleChildScrollView(
+//           child: Container(
+//             margin: EdgeInsets.symmetric(horizontal: 28),
+//             padding: EdgeInsets.all(16),
+//             decoration: BoxDecoration(color: Colors.white, borderRadius: kRadius),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.stretch,
+//               children: [
+//                 SizedBox(height: 8),
+//                 Text('Daftar', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+//                 SizedBox(height: 12),
+//                 TextField(decoration: InputDecoration(hintText: 'Enter Email', filled: true, fillColor: kBeige.withOpacity(0.2), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none))),
+//                 SizedBox(height: 12),
+//                 TextField(obscureText: true, decoration: InputDecoration(hintText: 'Password', filled: true, fillColor: kBeige.withOpacity(0.2), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none))),
+//                 SizedBox(height: 18),
+//                 ElevatedButton(onPressed: () {}, child: Padding(padding: EdgeInsets.symmetric(vertical: 14), child: Text('Daftar')),
+//                     style: ElevatedButton.styleFrom(backgroundColor: kDark, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 
 //////////////////////////////////////////////////////////////
